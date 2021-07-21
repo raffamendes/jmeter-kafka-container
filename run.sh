@@ -43,7 +43,9 @@ for FILE in $JMETER_TESTPLANS/*;
         echo "-Jrecord.size=$RECORD_SIZE \ "
         echo "-Jthrottle.record.size=$THROTTLE_RECORD_SIZE \ "
         echo "-Jthrottle.message.num=$THROTTLE_MESSAGE_NUM \ "
-        echo "-Jnumber.records=$NUMBER_RECORDS; "
+        echo "-Jnumber.records=$NUMBER_RECORDS \ "
+        echo "-Jtrustore.path=$TRUSTSTORE_PATH \ "
+        echo "-Jtruststore.pass=$TRUSTSTORE_PASS; "
         echo
         
         jmeter -n -t $FILE \
@@ -72,6 +74,8 @@ for FILE in $JMETER_TESTPLANS/*;
         -Jrecord.size=$RECORD_SIZE \
         -Jthrottle.record.size=$THROTTLE_RECORD_SIZE \
         -Jthrottle.message.num=$THROTTLE_MESSAGE_NUM \
-        -Jnumber.records=$NUMBER_RECORDS;
+        -Jnumber.records=$NUMBER_RECORDS \
+        -Jtruststore.path=$TRUSTSTORE_PATH \
+        -Jtruststore.pass=$TRUSTSTORE_PASS;
 done
 

@@ -1,18 +1,16 @@
 package blog.braindose.kafka;
 
 import java.util.Arrays;
+import java.util.Properties;
 import java.util.Random;
 
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.header.Header;
-import org.apache.kafka.common.header.internals.RecordHeader;
-import org.apache.kafka.common.header.Headers;
-import org.apache.kafka.common.header.internals.RecordHeaders;
+import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.producer.Callback;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import java.util.Properties;
+import org.apache.kafka.common.config.SslConfigs;
 
 public class KafkaPerformance {
 
@@ -42,7 +40,7 @@ public class KafkaPerformance {
     public KafkaPerformance(String kafkaTopic, String kafkaMessage, int recordSize, int numRecords,
             String bootstrapServer, String compressionType, int batchSize, long lingerMS, long bufferMemory,
             String acks, int sendBufferBytes, int receiveBufferBytes, long maxBlockMS, int deliveryTimeoutMS,
-            int throttleSizeRate, int throttleMessageRate) {
+            int throttleSizeRate, int throttleMessageRate, String truststorePath, String truststorePass) {
         this.kafkaTopic = kafkaTopic;
         this.kafkaMessage = kafkaMessage;
         this.recordSize = recordSize;
@@ -62,18 +60,23 @@ public class KafkaPerformance {
 
         this.props = new Properties();
 
-        this.props.put("bootstrap.servers", this.bootstrapServer);
-        this.props.put("key.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
-        this.props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
-        this.props.put("compression.type", this.compressionType);
-        this.props.put("batch.size", this.batchSize);
-        this.props.put("linger.ms", this.lingerMS);
-        this.props.put("buffer.memory", this.bufferMemory);
-        this.props.put("acks", this.acks);
-        this.props.put("send.buffer.bytes", this.sendBufferBytes);
-        this.props.put("receive.buffer.bytes", this.receiveBufferBytes);
-        this.props.put("max.block.ms", this.maxBlockMS);
-        this.props.put("delivery.timeout.ms", this.deliveryTimeoutMS);
+        this.props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, this.bootstrapServer);
+        this.props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.ByteArraySerializer");
+        this.props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.ByteArraySerializer");
+        this.props.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, this.compressionType);
+        this.props.put(ProducerConfig.BATCH_SIZE_CONFIG, this.batchSize);
+        this.props.put(ProducerConfig.LINGER_MS_CONFIG, this.lingerMS);
+        this.props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, this.bufferMemory);
+        this.props.put(ProducerConfig.ACKS_CONFIG, this.acks);
+        this.props.put(ProducerConfig.SEND_BUFFER_CONFIG, this.sendBufferBytes);
+        this.props.put(ProducerConfig.RECEIVE_BUFFER_CONFIG, this.receiveBufferBytes);
+        this.props.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, this.maxBlockMS);
+        this.props.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, this.deliveryTimeoutMS);
+        if(truststorePath != null) {
+        	this.props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, truststorePath);
+        	this.props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, truststorePass);
+        	this.props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "ssl");
+        }
 
         initMessage();
 
@@ -81,10 +84,10 @@ public class KafkaPerformance {
 
     public KafkaPerformance(String kafkaTopic, String kafkaMessage, int recordSize, int numRecords,
             String bootstrapServer, String compressionType, int batchSize, long lingerMS, long bufferMemory,
-            String acks, int sendBufferBytes, int receiveBufferBytes, long maxBlockMS, int deliveryTimeoutMS) {
+            String acks, int sendBufferBytes, int receiveBufferBytes, long maxBlockMS, int deliveryTimeoutMS, String truststorePath, String truststorePass) {
 
         this(kafkaTopic, kafkaMessage, recordSize, numRecords, bootstrapServer, compressionType, batchSize, lingerMS,
-                bufferMemory, acks, sendBufferBytes, receiveBufferBytes, maxBlockMS, deliveryTimeoutMS, 0, 0);
+                bufferMemory, acks, sendBufferBytes, receiveBufferBytes, maxBlockMS, deliveryTimeoutMS, 0, 0, truststorePath, truststorePass);
     }
 
     private void initMessage() {

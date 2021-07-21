@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.4">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.4.1">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Kafka Performance Test Pan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -138,6 +138,16 @@
             <stringProp name="Argument.value">${__P(throttle.message.num, 0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="TRUSTSTORE_PATH" elementType="Argument">
+            <stringProp name="Argument.name">TRUSTSTORE_PATH</stringProp>
+            <stringProp name="Argument.value">${__P(truststore.path,null)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="TRUSTSTORE_PASS" elementType="Argument">
+            <stringProp name="Argument.name">TRUSTSTORE_PASS</stringProp>
+            <stringProp name="Argument.value">${__P(truststore.pass,null)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </elementProp>
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
@@ -151,11 +161,10 @@
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${JMETER_THREADS}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${RAMPUP_PERIOD}</stringProp>
-        <boolProp name="ThreadGroup.scheduler">${THREADGROUP_SCHEDULER}</boolProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration">${THREADGROUP_DURATION}</stringProp>
         <stringProp name="ThreadGroup.delay">${THREADGROUP_DELAY}</stringProp>
-        <boolProp name="ThreadGroup.same_user_on_next_iteration">${THREADGROUP_SAME_USER_EACH_ITERATION}</boolProp>
-        <boolProp name="ThreadGroup.delayedStart">${THREADGROUP_DELAY_START}</boolProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
       </ThreadGroup>
       <hashTree>
         <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="${SAMPLER_LABEL}" enabled="true">
@@ -168,7 +177,7 @@
 try{
 	KafkaPerformance kperf = new KafkaPerformance(&quot;${KAFKA_TOPIC}&quot;, &quot;${KAFKA_MESSAGE}&quot;, ${RECORD_SIZE}, ${NUMBER_RECORDS}, &quot;${BOOTSTRAP_SERVERS}&quot;,
 	            &quot;${COMPRESSION_TYPE}&quot;, ${BATCH_SIZE}, ${LINGER_MS}, ${BUFFER_MEMORY}, &quot;${ACKS}&quot;, ${SEND_BUFFER_BYTES},
-	            ${RECEIVE_BUFFER_BYTES}, ${MAX_BLOCK_MS}, ${DELIVERY_TIMEOUT_MS}, ${THROTTLE_RECORDSIZE}, ${THROTTLE_MESSAGENUM})
+	            ${RECEIVE_BUFFER_BYTES}, ${MAX_BLOCK_MS}, ${DELIVERY_TIMEOUT_MS}, ${THROTTLE_RECORDSIZE}, ${THROTTLE_MESSAGENUM},&quot;${TRUSTSTORE_PATH}&quot;, &quot;${TRUSTSTORE_PASS}&quot;)
 	
 	            
 	kperf.send();

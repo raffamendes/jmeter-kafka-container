@@ -18,7 +18,7 @@ LABEL name="${CONTAINER_NAME}" \
 
 USER root
 
-RUN microdnf install wget
+RUN microdnf install wget gzip
 
 ENV JMETER_HOME /opt/jmeter
 ENV JMETER_BIN ${JMETER_HOME}/bin
@@ -35,7 +35,7 @@ mv apache-jmeter-${JMETER_VERSION} ${JMETER_HOME}
 RUN wget https://repo1.maven.org/maven2/org/apache/kafka/kafka-clients/${KAFKA_CLIENT_VERSION}/kafka-clients-${KAFKA_CLIENT_VERSION}.jar && mv kafka-clients-${KAFKA_CLIENT_VERSION}.jar ${JMETER_HOME}/lib/
 
 COPY ./jmeter-kafka-plugin/target/jmeter-kafka-plugin-*.jar ${JMETER_HOME}/lib/
-
+COPY ./truststore.jks ${JMETER_HOME}/
 # RUN wget https://repo1.maven.org/maven2/com/github/johrstrom/jmeter-prometheus-plugin/${PROMETHEUS_PLUGIN_VERSION}/jmeter-prometheus-plugin-${PROMETHEUS_PLUGIN_VERSION}.jar && mv jmeter-prometheus-plugin-${PROMETHEUS_PLUGIN_VERSION}.jar ${JMETER_HOME}/lib/ext/
 
 RUN mkdir -p ${JMETER_TESTPLANS}
