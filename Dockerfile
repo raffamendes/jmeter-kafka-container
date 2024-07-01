@@ -1,7 +1,7 @@
-FROM registry.access.redhat.com/ubi8/openjdk-11
+FROM registry.access.redhat.com/ubi8/openjdk-21
 
-ARG JMETER_VERSION="5.4.1"
-ARG KAFKA_CLIENT_VERSION="2.7.0"
+ARG JMETER_VERSION="5.6.3"
+ARG KAFKA_CLIENT_VERSION="3.7.0"
 ARG PROMETHEUS_PLUGIN_VERSION="0.6.0"
 ENV JMETER_CONTAINER_VERSION="1.0.0"
 ENV CONTAINER_NAME="JMeter Container for Kafka Load Testing"

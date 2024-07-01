@@ -72,7 +72,7 @@ public class KafkaPerformance {
         this.props.put(ProducerConfig.RECEIVE_BUFFER_CONFIG, this.receiveBufferBytes);
         this.props.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, this.maxBlockMS);
         this.props.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, this.deliveryTimeoutMS);
-        if(truststorePath != null) {
+        if(truststorePath != "") {
         	this.props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, truststorePath);
         	this.props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, truststorePass);
         	this.props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "ssl");
